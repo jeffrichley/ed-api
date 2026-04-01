@@ -70,6 +70,6 @@ class CommentsResource:
     def unendorse(self, comment_id: int) -> None:
         self._http.post(f"comments/{comment_id}/unendorse")
 
-    def accept(self, thread_id: int, comment_id: int) -> None:
-        """Accept a comment as the answer to a thread."""
-        self._http.post(f"threads/{thread_id}/accept/{comment_id}")
+    def accept(self, comment_id: int) -> None:
+        """Accept a comment as the answer to its thread."""
+        self._http.post(f"comments/{comment_id}/accept")

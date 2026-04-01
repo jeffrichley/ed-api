@@ -56,9 +56,8 @@ def unendorse(comment_id: int = typer.Argument()):
 
 @app.command()
 def accept(
-    thread_id: int = typer.Argument(help="Thread ID"),
     comment_id: int = typer.Argument(help="Comment ID to accept as answer"),
 ):
     """Accept a comment as the answer."""
-    EdClient().comments.accept(thread_id, comment_id)
-    console.print(f"Comment {comment_id} accepted as answer for thread {thread_id}.")
+    EdClient().comments.accept(comment_id)
+    console.print(f"Comment {comment_id} accepted as answer.")
