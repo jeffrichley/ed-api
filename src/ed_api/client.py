@@ -27,7 +27,8 @@ class EdClient:
         region: str | None = None,
         rate_limit: float = 5.0,
     ):
-        load_dotenv()
+        load_dotenv()  # try default .env discovery
+        load_dotenv(os.path.join(os.getcwd(), ".env"), override=False)  # also try cwd explicitly
 
         self._token = token or os.environ.get("ED_API_TOKEN")
         if not self._token:
