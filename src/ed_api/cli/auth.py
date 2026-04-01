@@ -3,6 +3,8 @@
 import json
 import typer
 from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
 from ed_api.client import EdClient
 
 app = typer.Typer(help="Authentication commands.")
@@ -47,6 +49,25 @@ def whoami(
             ],
         }))
     else:
-        console.print(f"[bold]{info.user.name}[/bold] ({info.user.email})")
+        console.print(Panel(
+            f"[bold]{info.user.name}[/bold]\n{info.user.email}",
+            title="EdStem User",
+            border_style="blue",
+        ))
+
+        table = Table(title="Enrolled Courses", show_lines=False)
+        table.add_column("ID", style="dim", justify="right")
+        table.add_column("Code", style="bold")
+        table.add_column("Name")
+        table.add_column("Role")
+
         for c in info.courses:
-            console.print(f"  [dim]{c.course.id}[/dim] {c.course.code} — {c.course.name} ({c.role})")
+            role_style = "green" if c.role in ("admin", "staff") else "dim"
+            table.add_row(
+                str(c.course.id),
+                c.course.code,
+                c.course.name,
+                f"[{role_style}]{c.role}[/{role_style}]",
+            )
+
+        console.print(table)
