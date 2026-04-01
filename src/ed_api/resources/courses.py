@@ -22,7 +22,7 @@ class CoursesResource:
         users_data = response.json().get("users", [])
         users = [
             CourseUser(
-                id=u["id"],
+                id=u.get("user_id") or u.get("id", 0),
                 name=u.get("name", ""),
                 email=u.get("email", ""),
                 role=u.get("role", "user"),
