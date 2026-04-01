@@ -73,3 +73,7 @@ class CommentsResource:
     def accept(self, comment_id: int) -> None:
         """Accept a comment as the answer to its thread."""
         self._http.post(f"comments/{comment_id}/accept")
+
+    def delete(self, comment_id: int) -> None:
+        """Delete a comment."""
+        self._http.delete(f"comments/{comment_id}")

@@ -61,3 +61,10 @@ def accept(
     """Accept a comment as the answer."""
     EdClient().comments.accept(comment_id)
     console.print(f"Comment {comment_id} accepted as answer.")
+
+
+@app.command()
+def delete(comment_id: int = typer.Argument()):
+    """Delete a comment."""
+    EdClient().comments.delete(comment_id)
+    console.print(f"Comment {comment_id} deleted.")

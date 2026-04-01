@@ -229,3 +229,10 @@ def unendorse(thread_id: int = typer.Argument()):
     """Remove endorsement from a thread."""
     EdClient().threads.unendorse(thread_id)
     console.print(f"Thread {thread_id} unendorsed.")
+
+
+@app.command()
+def delete(thread_id: int = typer.Argument()):
+    """Delete a thread."""
+    EdClient().threads.delete(thread_id)
+    console.print(f"Thread {thread_id} deleted.")

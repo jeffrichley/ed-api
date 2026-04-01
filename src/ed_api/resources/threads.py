@@ -149,3 +149,7 @@ class ThreadsResource:
 
     def unstar(self, thread_id: int) -> None:
         self._http.post(f"threads/{thread_id}/unstar")
+
+    def delete(self, thread_id: int) -> None:
+        """Delete a thread."""
+        self._http.delete(f"threads/{thread_id}")
