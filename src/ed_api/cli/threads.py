@@ -33,15 +33,19 @@ def list_threads(
             for t in threads
         ]))
     else:
+        has_pinned = any(t.is_pinned for t in threads)
         table = Table(title=f"Threads in course {course_id}")
         table.add_column("#", justify="right")
         table.add_column("Title")
         table.add_column("Category")
         table.add_column("Replies", justify="right")
-        table.add_column("Pinned", justify="center")
+        if has_pinned:
+            table.add_column("Pinned", justify="center")
         for t in threads:
-            pin = "[yellow]📌[/yellow]" if t.is_pinned else ""
-            table.add_row(str(t.number), t.title, t.category, str(t.reply_count), pin)
+            row = [str(t.number), t.title, t.category, str(t.reply_count)]
+            if has_pinned:
+                row.append("[yellow]📌[/yellow]" if t.is_pinned else "")
+            table.add_row(*row)
         console.print(table)
 
 
