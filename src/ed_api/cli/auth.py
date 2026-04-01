@@ -49,4 +49,4 @@ def whoami(
     else:
         console.print(f"[bold]{info.user.name}[/bold] ({info.user.email})")
         for c in info.courses:
-            console.print(f"  {c.course.code} — {c.course.name} ({c.role})")
+            console.print(f"  [dim]{c.course.id}[/dim] {c.course.code} — {c.course.name} ({c.role})")
