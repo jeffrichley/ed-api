@@ -3,8 +3,11 @@
 import json
 import typer
 from rich.console import Console
+from rich.markdown import Markdown
+from rich.panel import Panel
 from rich.table import Table
 from ed_api.client import EdClient
+from ed_api.content import ed_xml_to_markdown
 
 app = typer.Typer(help="Thread commands.")
 console = Console()
@@ -73,12 +76,41 @@ def get(
             ],
         }))
     else:
-        console.print(f"[bold]#{thread.number}:[/bold] {thread.title}")
-        console.print(f"Category: {thread.category}")
+        # Thread header
+        try:
+            body_md = ed_xml_to_markdown(thread.content)
+        except Exception:
+            body_md = thread.content
+
+        author_name = thread.author.name if thread.author else "Unknown"
+        console.print(Panel(
+            f"[bold]{thread.title}[/bold]\n"
+            f"[dim]#{thread.number} | {thread.category} | by {author_name}[/dim]\n"
+            f"[dim]Answered: {'yes' if thread.is_answered else 'no'} | "
+            f"Endorsed: {'yes' if thread.is_endorsed else 'no'} | "
+            f"Private: {'yes' if thread.is_private else 'no'}[/dim]",
+            border_style="blue",
+        ))
+        console.print(Markdown(body_md))
+
+        # Comments
+        if not thread.comments:
+            console.print("\n[dim]No comments yet.[/dim]")
         for c in thread.comments:
-            label = "[answer]" if c.type == "answer" else "[comment]"
-            endorsed = " (endorsed)" if c.is_endorsed else ""
-            console.print(f"\n  {label}{endorsed} by user {c.user_id}")
+            author = thread.users.get(c.user_id)
+            name = author.name if author else f"User {c.user_id}"
+            role = f" ({author.role})" if author else ""
+            endorsed = " [green]endorsed[/green]" if c.is_endorsed else ""
+            type_label = "[bold cyan]Answer[/bold cyan]" if c.type == "answer" else "[bold]Comment[/bold]"
+
+            try:
+                comment_md = ed_xml_to_markdown(c.content)
+            except Exception:
+                comment_md = c.content
+
+            console.print(f"\n{'─' * 60}")
+            console.print(f"{type_label} by {name}{role}{endorsed}")
+            console.print(Markdown(comment_md))
 
 
 @app.command()

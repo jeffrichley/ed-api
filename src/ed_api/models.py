@@ -211,6 +211,11 @@ def parse_thread_detail(raw: dict) -> ThreadDetail:
         )
 
     base = parse_thread(thread_data)
+    # Fix author from users dict if parse_thread couldn't find it
+    thread_user_id = thread_data.get("user_id", 0)
+    if base.author.name == "Unknown" and thread_user_id in users:
+        base = Thread(**{**base.__dict__, "author": users[thread_user_id]})
+
     answers = [parse_comment(a, users) for a in thread_data.get("answers", [])]
     comments = [parse_comment(c, users) for c in thread_data.get("comments", [])]
     all_comments = answers + comments
