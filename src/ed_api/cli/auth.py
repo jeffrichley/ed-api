@@ -61,7 +61,8 @@ def whoami(
         table.add_column("Name")
         table.add_column("Role")
 
-        for c in info.courses:
+        courses = sorted(info.courses, key=lambda c: c.course.id, reverse=True)
+        for c in courses:
             role_style = "green" if c.role in ("admin", "staff") else "dim"
             table.add_row(
                 str(c.course.id),
