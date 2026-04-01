@@ -33,3 +33,8 @@ packages = ["src/ed_api"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[dependency-groups]
+dev = [
+    "mkdocs-material>=9.7.6",
+]

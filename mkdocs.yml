@@ -1,0 +1,61 @@
+site_name: ed-api
+site_url: https://jeffrichley.github.io/ed-api
+site_description: Full-featured Python client for the EdStem API.
+repo_url: https://github.com/jeffrichley/ed-api
+repo_name: jeffrichley/ed-api
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  palette:
+    scheme: iris
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+
+extra_css:
+  - stylesheets/iris.css
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+  - Guide:
+    - Authentication: guide/authentication.md
+    - Threads: guide/threads.md
+    - Comments: guide/comments.md
+    - Courses & Users: guide/courses.md
+    - Files: guide/files.md
+    - Content Conversion: guide/content.md
+  - CLI Reference: cli.md
+  - Python API: api.md
