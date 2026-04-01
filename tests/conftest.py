@@ -37,3 +37,13 @@ def comment_response() -> dict:
 @pytest.fixture
 def file_upload_response() -> dict:
     return load_fixture("file_upload.json")
+
+
+@pytest.fixture
+def lessons_list_response() -> dict:
+    return load_fixture("lessons_list.json")
+
+
+@pytest.fixture
+def lesson_detail_response() -> dict:
+    return load_fixture("lesson_detail.json")

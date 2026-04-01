@@ -247,6 +247,88 @@ def parse_thread_detail(raw: dict) -> ThreadDetail:
     )
 
 
+@dataclass
+class Slide:
+    id: int
+    lesson_id: int
+    course_id: int
+    type: str  # "document", "quiz", "code", "pdf", "video", "webpage", "html"
+    title: str
+    index: int
+    is_hidden: bool
+    content: str  # Ed XML or HTML
+    video_url: str | None  # for type=="video"
+    file_url: str | None  # for type=="pdf" etc
+    url: str | None  # for type=="webpage"
+    created_at: datetime | None
+
+
+@dataclass
+class Lesson:
+    id: int
+    course_id: int
+    module_id: int | None
+    title: str
+    lesson_number: int
+    is_hidden: bool
+    is_unlisted: bool
+    created_at: datetime | None
+    available_at: datetime | None
+    due_at: datetime | None
+    slides: list[Slide] = field(default_factory=list)
+
+
+@dataclass
+class Module:
+    id: int
+    name: str
+    course_id: int
+
+
+# --- Lesson/Slide parse functions ---
+
+def parse_slide(raw: dict) -> Slide:
+    return Slide(
+        id=raw["id"],
+        lesson_id=raw.get("lesson_id", 0),
+        course_id=raw.get("course_id", 0),
+        type=raw.get("type", "document"),
+        title=raw.get("title", ""),
+        index=raw.get("index", 0),
+        is_hidden=raw.get("is_hidden", False),
+        content=raw.get("content", ""),
+        video_url=raw.get("video_url"),
+        file_url=raw.get("file_url"),
+        url=raw.get("url"),
+        created_at=_parse_dt(raw.get("created_at")),
+    )
+
+
+def parse_lesson(raw: dict) -> Lesson:
+    slides = [parse_slide(s) for s in raw.get("slides", [])]
+    return Lesson(
+        id=raw["id"],
+        course_id=raw.get("course_id", 0),
+        module_id=raw.get("module_id"),
+        title=raw.get("title", ""),
+        lesson_number=raw.get("lesson_number", 0),
+        is_hidden=raw.get("is_hidden", False),
+        is_unlisted=raw.get("is_unlisted", False),
+        created_at=_parse_dt(raw.get("created_at")),
+        available_at=_parse_dt(raw.get("available_at")),
+        due_at=_parse_dt(raw.get("due_at")),
+        slides=slides,
+    )
+
+
+def parse_module(raw: dict) -> Module:
+    return Module(
+        id=raw["id"],
+        name=raw.get("name", ""),
+        course_id=raw.get("course_id", 0),
+    )
+
+
 def parse_user_info(raw: dict) -> ParsedUserInfo:
     u = raw["user"]
     user = UserInfo(

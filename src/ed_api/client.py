@@ -8,6 +8,7 @@ from ed_api._http import HttpClient
 from ed_api.resources.comments import CommentsResource
 from ed_api.resources.courses import CoursesResource
 from ed_api.resources.files import FilesResource
+from ed_api.resources.lessons import LessonsResource
 from ed_api.resources.threads import ThreadsResource
 from ed_api.resources.user import UserResource
 
@@ -48,6 +49,7 @@ class EdClient:
         self.threads = ThreadsResource(self._http)
         self.comments = CommentsResource(self._http)
         self.files = FilesResource(self._http, region=self._region)
+        self.lessons = LessonsResource(self._http)
 
     def close(self):
         """Close the HTTP client."""
