@@ -1,0 +1,53 @@
+{
+  "threads": [
+    {
+      "id": 100,
+      "number": 1,
+      "user_id": 99,
+      "course_id": 54321,
+      "type": "question",
+      "title": "get_data() returns NaN",
+      "content": "<document version=\"2.0\"><paragraph>My data has NaN values</paragraph></document>",
+      "document": "<p>My data has NaN values</p>",
+      "category": "Project 1",
+      "subcategory": "",
+      "subsubcategory": "",
+      "flag_count": 0,
+      "star_count": 2,
+      "view_count": 45,
+      "unique_view_count": 30,
+      "vote_count": 3,
+      "reply_count": 2,
+      "unresolved_count": 0,
+      "is_locked": false,
+      "is_pinned": false,
+      "is_private": false,
+      "is_endorsed": false,
+      "is_answered": true,
+      "is_student_answered": true,
+      "is_staff_answered": false,
+      "is_archived": false,
+      "is_anonymous": false,
+      "is_megathread": false,
+      "anonymous_comments": false,
+      "approved_status": "approved",
+      "created_at": "2026-03-15T10:30:00.000Z",
+      "updated_at": "2026-03-16T14:22:00.000Z",
+      "deleted_at": null,
+      "pinned_at": null,
+      "anonymous_id": 0,
+      "vote": 0,
+      "is_seen": true,
+      "is_starred": false,
+      "is_watched": false,
+      "new_reply_count": 0,
+      "user": {
+        "id": 99,
+        "name": "Student A",
+        "role": "user",
+        "course_role": "student",
+        "avatar": null
+      }
+    }
+  ]
+}

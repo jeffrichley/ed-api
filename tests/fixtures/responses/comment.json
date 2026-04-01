@@ -1,0 +1,21 @@
+{
+  "comment": {
+    "id": 300,
+    "user_id": 88,
+    "course_id": 54321,
+    "thread_id": 100,
+    "parent_id": null,
+    "type": "comment",
+    "content": "<document version=\"2.0\"><paragraph>Here is my response.</paragraph></document>",
+    "document": "<p>Here is my response.</p>",
+    "is_endorsed": false,
+    "is_anonymous": false,
+    "is_private": false,
+    "is_resolved": false,
+    "created_at": "2026-03-16T10:00:00.000Z",
+    "updated_at": "2026-03-16T10:00:00.000Z",
+    "deleted_at": null,
+    "vote_count": 0,
+    "comments": []
+  }
+}

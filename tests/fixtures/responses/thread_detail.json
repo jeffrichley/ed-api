@@ -1,0 +1,73 @@
+{
+  "thread": {
+    "id": 100,
+    "number": 1,
+    "user_id": 99,
+    "course_id": 54321,
+    "type": "question",
+    "title": "get_data() returns NaN",
+    "content": "<document version=\"2.0\"><paragraph>My data has NaN values</paragraph></document>",
+    "document": "<p>My data has NaN values</p>",
+    "category": "Project 1",
+    "subcategory": "",
+    "subsubcategory": "",
+    "is_locked": false,
+    "is_pinned": false,
+    "is_private": false,
+    "is_endorsed": false,
+    "is_answered": true,
+    "is_student_answered": true,
+    "is_staff_answered": true,
+    "is_archived": false,
+    "is_anonymous": false,
+    "created_at": "2026-03-15T10:30:00.000Z",
+    "updated_at": "2026-03-16T14:22:00.000Z",
+    "deleted_at": null,
+    "answers": [
+      {
+        "id": 200,
+        "user_id": 88,
+        "course_id": 54321,
+        "thread_id": 100,
+        "parent_id": null,
+        "type": "answer",
+        "content": "<document version=\"2.0\"><paragraph>The NaN values are expected due to lookback period.</paragraph></document>",
+        "document": "<p>The NaN values are expected due to lookback period.</p>",
+        "is_endorsed": true,
+        "is_anonymous": false,
+        "is_private": false,
+        "is_resolved": false,
+        "created_at": "2026-03-15T12:00:00.000Z",
+        "updated_at": "2026-03-15T12:00:00.000Z",
+        "deleted_at": null,
+        "vote_count": 5,
+        "comments": []
+      }
+    ],
+    "comments": [
+      {
+        "id": 201,
+        "user_id": 99,
+        "course_id": 54321,
+        "thread_id": 100,
+        "parent_id": null,
+        "type": "comment",
+        "content": "<document version=\"2.0\"><paragraph>Thank you!</paragraph></document>",
+        "document": "<p>Thank you!</p>",
+        "is_endorsed": false,
+        "is_anonymous": false,
+        "is_private": false,
+        "is_resolved": false,
+        "created_at": "2026-03-15T14:00:00.000Z",
+        "updated_at": "2026-03-15T14:00:00.000Z",
+        "deleted_at": null,
+        "vote_count": 0,
+        "comments": []
+      }
+    ]
+  },
+  "users": [
+    {"id": 99, "name": "Student A", "role": "user", "course_role": "student", "avatar": null},
+    {"id": 88, "name": "TA Smith", "role": "user", "course_role": "staff", "avatar": null}
+  ]
+}
