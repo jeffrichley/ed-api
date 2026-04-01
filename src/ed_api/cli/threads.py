@@ -114,6 +114,49 @@ def get(
 
 
 @app.command()
+def create(
+    course_id: int = typer.Argument(help="Course ID"),
+    title: str = typer.Option(..., "--title", help="Thread title"),
+    body: str = typer.Option(..., "--body", help="Thread body (markdown)"),
+    category: str = typer.Option("General", "--category", help="Category"),
+    type: str = typer.Option("question", "--type", help="Thread type: question, post, announcement"),
+    private: bool = typer.Option(False, "--private", help="Create as private thread"),
+    json_output: bool = typer.Option(False, "--json"),
+):
+    """Create a new thread."""
+    client = EdClient()
+    thread = client.threads.create(
+        course_id, title=title, body=body, type=type,
+        category=category, is_private=private,
+    )
+    if json_output:
+        print(json.dumps({
+            "id": thread.id, "number": thread.number, "title": thread.title,
+        }))
+    else:
+        console.print(f"[green]Created thread #{thread.number}:[/green] {thread.title} (id: {thread.id})")
+
+
+@app.command()
+def edit(
+    thread_id: int = typer.Argument(help="Thread ID"),
+    title: str = typer.Option(None, "--title", help="New title"),
+    body: str = typer.Option(None, "--body", help="New body (markdown)"),
+    category: str = typer.Option(None, "--category", help="New category"),
+    json_output: bool = typer.Option(False, "--json"),
+):
+    """Edit an existing thread."""
+    client = EdClient()
+    thread = client.threads.edit(thread_id, title=title, body=body, category=category)
+    if json_output:
+        print(json.dumps({
+            "id": thread.id, "number": thread.number, "title": thread.title,
+        }))
+    else:
+        console.print(f"[green]Updated thread #{thread.number}:[/green] {thread.title}")
+
+
+@app.command()
 def search(
     course_id: int = typer.Argument(help="Course ID"),
     query: str = typer.Argument(help="Search query"),
