@@ -2,7 +2,7 @@
 
 import os
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
 from ed_api._http import HttpClient
 from ed_api.resources.comments import CommentsResource
@@ -27,8 +27,7 @@ class EdClient:
         region: str | None = None,
         rate_limit: float = 5.0,
     ):
-        load_dotenv()  # try default .env discovery
-        load_dotenv(os.path.join(os.getcwd(), ".env"), override=False)  # also try cwd explicitly
+        load_dotenv(find_dotenv(usecwd=True))
 
         self._token = token or os.environ.get("ED_API_TOKEN")
         if not self._token:
