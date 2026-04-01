@@ -15,26 +15,33 @@ def list_threads(
     course_id: int = typer.Argument(help="Course ID"),
     limit: int = typer.Option(30, "--limit"),
     sort: str = typer.Option("new", "--sort"),
+    no_pinned: bool = typer.Option(False, "--no-pinned", help="Exclude pinned threads"),
     json_output: bool = typer.Option(False, "--json"),
 ):
     """List threads in a course."""
     client = EdClient()
-    threads = client.threads.list(course_id, limit=limit, sort=sort)
+    fetch_limit = limit * 3 if no_pinned else limit  # over-fetch to compensate for filtering
+    threads = client.threads.list(course_id, limit=fetch_limit, sort=sort)
+    if no_pinned:
+        threads = [t for t in threads if not t.is_pinned]
+    threads = threads[:limit]
     if json_output:
         print(json.dumps([
             {"id": t.id, "number": t.number, "title": t.title, "type": t.type,
-             "category": t.category, "is_answered": t.is_answered,
+             "category": t.category, "is_answered": t.is_answered, "is_pinned": t.is_pinned,
              "reply_count": t.reply_count, "created_at": str(t.created_at)}
             for t in threads
         ]))
     else:
         table = Table(title=f"Threads in course {course_id}")
-        table.add_column("#")
+        table.add_column("#", justify="right")
         table.add_column("Title")
         table.add_column("Category")
-        table.add_column("Replies")
+        table.add_column("Replies", justify="right")
+        table.add_column("Pinned", justify="center")
         for t in threads:
-            table.add_row(str(t.number), t.title, t.category, str(t.reply_count))
+            pin = "[yellow]📌[/yellow]" if t.is_pinned else ""
+            table.add_row(str(t.number), t.title, t.category, str(t.reply_count), pin)
         console.print(table)
 
 
