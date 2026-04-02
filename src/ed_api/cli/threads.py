@@ -3,14 +3,12 @@
 import json
 import typer
 from rich.console import Console
-from rich.markdown import Markdown
-from rich.panel import Panel
-from rich.table import Table
 from ed_api.client import EdClient
 from ed_api.content import ed_xml_to_markdown
 
 app = typer.Typer(help="Thread commands.")
 console = Console()
+err_console = Console(stderr=True)
 
 
 @app.command(name="list")
@@ -29,13 +27,15 @@ def list_threads(
         threads = [t for t in threads if not t.is_pinned]
     threads = threads[:limit]
     if json_output:
-        print(json.dumps([
+        typer.echo(json.dumps([
             {"id": t.id, "number": t.number, "title": t.title, "type": t.type,
              "category": t.category, "is_answered": t.is_answered, "is_pinned": t.is_pinned,
              "reply_count": t.reply_count, "created_at": str(t.created_at)}
             for t in threads
         ]))
     else:
+        from rich.table import Table
+
         has_pinned = any(t.is_pinned for t in threads)
         table = Table(title=f"Threads in course {course_id}")
         table.add_column("#", justify="right")
@@ -65,7 +65,7 @@ def get(
     else:
         thread = client.threads.get(int(thread_ref))
     if json_output:
-        print(json.dumps({
+        typer.echo(json.dumps({
             "id": thread.id, "number": thread.number, "title": thread.title,
             "content": thread.content, "category": thread.category,
             "is_answered": thread.is_answered,
@@ -76,6 +76,9 @@ def get(
             ],
         }))
     else:
+        from rich.markdown import Markdown
+        from rich.panel import Panel
+
         # Thread header
         try:
             body_md = ed_xml_to_markdown(thread.content)
@@ -130,7 +133,7 @@ def create(
         category=category, is_private=private,
     )
     if json_output:
-        print(json.dumps({
+        typer.echo(json.dumps({
             "id": thread.id, "number": thread.number, "title": thread.title,
         }))
     else:
@@ -149,7 +152,7 @@ def edit(
     client = EdClient()
     thread = client.threads.edit(thread_id, title=title, body=body, category=category)
     if json_output:
-        print(json.dumps({
+        typer.echo(json.dumps({
             "id": thread.id, "number": thread.number, "title": thread.title,
         }))
     else:
@@ -166,7 +169,7 @@ def search(
     client = EdClient()
     threads = client.threads.search(course_id, query)
     if json_output:
-        print(json.dumps([
+        typer.echo(json.dumps([
             {"id": t.id, "number": t.number, "title": t.title, "category": t.category}
             for t in threads
         ]))

@@ -7,6 +7,7 @@ from ed_api.content import markdown_to_ed_xml, ed_xml_to_markdown
 
 app = typer.Typer(help="Content conversion commands.")
 console = Console()
+err_console = Console(stderr=True)
 
 
 @app.command(name="to-xml")
@@ -17,7 +18,7 @@ def to_xml(
     """Convert markdown to Ed XML."""
     xml = markdown_to_ed_xml(markdown)
     if json_output:
-        print(json.dumps({"xml": xml}))
+        typer.echo(json.dumps({"xml": xml}))
     else:
         console.print(xml)
 
@@ -30,6 +31,6 @@ def to_markdown(
     """Convert Ed XML to markdown."""
     md = ed_xml_to_markdown(xml)
     if json_output:
-        print(json.dumps({"markdown": md}))
+        typer.echo(json.dumps({"markdown": md}))
     else:
         console.print(md)

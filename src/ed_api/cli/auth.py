@@ -3,12 +3,11 @@
 import json
 import typer
 from rich.console import Console
-from rich.panel import Panel
-from rich.table import Table
 from ed_api.client import EdClient
 
 app = typer.Typer(help="Authentication commands.")
 console = Console()
+err_console = Console(stderr=True)
 
 
 @app.command()
@@ -20,14 +19,14 @@ def check(
         client = EdClient()
         info = client.user.info()
         if json_output:
-            print(json.dumps({"status": "ok", "user": info.user.name}))
+            typer.echo(json.dumps({"status": "ok", "user": info.user.name}))
         else:
             console.print(f"[green]Token valid.[/green] Logged in as {info.user.name}")
     except Exception as e:
         if json_output:
-            print(json.dumps({"status": "error", "message": str(e)}))
+            typer.echo(json.dumps({"status": "error", "message": str(e)}))
         else:
-            console.print(f"[red]Token invalid:[/red] {e}")
+            err_console.print(f"[red]Token invalid:[/red] {e}")
         raise typer.Exit(1)
 
 
@@ -39,7 +38,7 @@ def whoami(
     client = EdClient()
     info = client.user.info()
     if json_output:
-        print(json.dumps({
+        typer.echo(json.dumps({
             "id": info.user.id,
             "name": info.user.name,
             "email": info.user.email,
@@ -49,6 +48,9 @@ def whoami(
             ],
         }))
     else:
+        from rich.panel import Panel
+        from rich.table import Table
+
         console.print(Panel(
             f"[bold]{info.user.name}[/bold]\n{info.user.email}",
             title="EdStem User",

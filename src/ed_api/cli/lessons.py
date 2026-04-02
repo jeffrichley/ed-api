@@ -3,11 +3,11 @@
 import json
 import typer
 from rich.console import Console
-from rich.table import Table
 from ed_api.client import EdClient
 
 app = typer.Typer(help="Lesson commands.")
 console = Console()
+err_console = Console(stderr=True)
 
 
 @app.command(name="list")
@@ -20,7 +20,7 @@ def list_lessons(
     lessons, modules = client.lessons.list(course_id)
 
     if json_output:
-        print(json.dumps({
+        typer.echo(json.dumps({
             "lessons": [
                 {"id": l.id, "title": l.title, "module_id": l.module_id,
                  "lesson_number": l.lesson_number, "is_hidden": l.is_hidden,
@@ -33,6 +33,8 @@ def list_lessons(
             ],
         }))
     else:
+        from rich.table import Table
+
         modules_by_id = {m.id: m for m in modules}
         # Group lessons by module
         grouped: dict[int | None, list] = {}
@@ -65,7 +67,7 @@ def get(
     lesson = client.lessons.get(lesson_id)
 
     if json_output:
-        print(json.dumps({
+        typer.echo(json.dumps({
             "id": lesson.id, "title": lesson.title,
             "lesson_number": lesson.lesson_number,
             "slides": [
@@ -101,13 +103,15 @@ def videos(
     results = client.lessons.video_slides(course_id)
 
     if json_output:
-        print(json.dumps([
+        typer.echo(json.dumps([
             {"lesson_id": lesson.id, "lesson_title": lesson.title,
              "slide_id": slide.id, "slide_title": slide.title,
              "video_url": slide.video_url}
             for lesson, slide in results
         ]))
     else:
+        from rich.table import Table
+
         table = Table(title=f"Video slides in course {course_id}")
         table.add_column("Lesson")
         table.add_column("Slide")

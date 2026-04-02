@@ -7,6 +7,7 @@ from ed_api.client import EdClient
 
 app = typer.Typer(help="File commands.")
 console = Console()
+err_console = Console(stderr=True)
 
 
 @app.command()
@@ -18,6 +19,6 @@ def upload(
     client = EdClient()
     url = client.files.upload_from_path(file_path)
     if json_output:
-        print(json.dumps({"url": url}))
+        typer.echo(json.dumps({"url": url}))
     else:
         console.print(f"Uploaded: {url}")

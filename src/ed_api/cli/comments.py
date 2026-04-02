@@ -7,6 +7,7 @@ from ed_api.client import EdClient
 
 app = typer.Typer(help="Comment commands.")
 console = Console()
+err_console = Console(stderr=True)
 
 
 @app.command()
@@ -20,7 +21,7 @@ def post(
     client = EdClient()
     comment = client.comments.post(thread_id, body, is_answer=answer)
     if json_output:
-        print(json.dumps({"id": comment.id, "type": comment.type, "thread_id": comment.thread_id}))
+        typer.echo(json.dumps({"id": comment.id, "type": comment.type, "thread_id": comment.thread_id}))
     else:
         console.print(f"Posted {comment.type} (id: {comment.id}) on thread {thread_id}")
 
@@ -35,7 +36,7 @@ def reply(
     client = EdClient()
     comment = client.comments.reply(comment_id, body)
     if json_output:
-        print(json.dumps({"id": comment.id, "type": comment.type}))
+        typer.echo(json.dumps({"id": comment.id, "type": comment.type}))
     else:
         console.print(f"Replied (id: {comment.id}) to comment {comment_id}")
 

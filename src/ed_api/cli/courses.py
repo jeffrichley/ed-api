@@ -3,11 +3,11 @@
 import json
 import typer
 from rich.console import Console
-from rich.table import Table
 from ed_api.client import EdClient
 
 app = typer.Typer(help="Course commands.")
 console = Console()
+err_console = Console(stderr=True)
 
 
 @app.command(name="list")
@@ -18,12 +18,14 @@ def list_courses(
     client = EdClient()
     courses = client.courses.list()
     if json_output:
-        print(json.dumps([
+        typer.echo(json.dumps([
             {"id": c.course.id, "code": c.course.code, "name": c.course.name,
              "year": c.course.year, "session": c.course.session, "role": c.role}
             for c in courses
         ]))
     else:
+        from rich.table import Table
+
         table = Table(title="Courses")
         table.add_column("ID")
         table.add_column("Code")
@@ -44,11 +46,13 @@ def users(
     client = EdClient()
     users_list = client.courses.users(course_id, role=role)
     if json_output:
-        print(json.dumps([
+        typer.echo(json.dumps([
             {"id": u.id, "name": u.name, "email": u.email, "role": u.course_role}
             for u in users_list
         ]))
     else:
+        from rich.table import Table
+
         table = Table(title=f"Users in course {course_id}")
         table.add_column("ID")
         table.add_column("Name")
