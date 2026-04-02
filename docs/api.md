@@ -35,6 +35,7 @@ Raises `ValueError` if no token is found from any source.
 | `client.threads` | `ThreadsResource` | Thread CRUD and moderation |
 | `client.comments` | `CommentsResource` | Comment operations |
 | `client.files` | `FilesResource` | File uploads |
+| `client.lessons` | `LessonsResource` | Lesson and slide browsing |
 
 ### Methods
 
@@ -225,6 +226,40 @@ comments.delete(comment_id: int) -> None
 
 ---
 
+## LessonsResource
+
+```python
+client.lessons
+```
+
+### Methods
+
+```python
+lessons.list(course_id: int) -> list[Lesson]
+```
+
+List all lessons (and their modules) for a course. Slides are not populated — call `get()` to load them.
+
+```python
+lessons.get(lesson_id: int) -> Lesson
+```
+
+Get a single lesson with its full list of slides.
+
+```python
+lessons.get_slide(slide_id: int) -> Slide
+```
+
+Get a single slide by ID.
+
+```python
+lessons.video_slides(course_id: int) -> list[Slide]
+```
+
+Return all slides of type `"video"` across every lesson in the course.
+
+---
+
 ## FilesResource
 
 ```python
@@ -396,6 +431,40 @@ class Course:
 class CourseEnrollment:
     course: Course
     role: str                    # "student" | "staff" | "admin"
+```
+
+### Lesson
+
+```python
+@dataclass
+class Lesson:
+    id: int
+    course_id: int
+    module_id: int | None
+    title: str
+    slides: list[Slide]           # populated by lessons.get(); empty from lessons.list()
+```
+
+### Slide
+
+```python
+@dataclass
+class Slide:
+    id: int
+    lesson_id: int
+    title: str
+    type: str                     # "document" | "quiz" | "code" | "pdf" | "video" | "webpage" | "html"
+    video_url: str | None         # Kaltura URL, video slides only
+```
+
+### Module
+
+```python
+@dataclass
+class Module:
+    id: int
+    course_id: int
+    title: str
 ```
 
 ### CourseUser

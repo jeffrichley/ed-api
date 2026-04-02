@@ -47,7 +47,15 @@ Every operation available as both a Python API and a Typer CLI command. Rich ter
 
 ### Resource-Based
 
-Clean resource namespaces: `client.threads`, `client.comments`, `client.courses`, `client.files`, `client.user`. Mirrors how EdStem organizes its API.
+Clean resource namespaces: `client.threads`, `client.comments`, `client.courses`, `client.files`, `client.lessons`, `client.user`. Mirrors how EdStem organizes its API.
+
+</div>
+
+<div class="iris-card" markdown>
+
+### Lessons & Slides
+
+Browse course lessons and slides — list modules, retrieve individual slides, and pull all video slide URLs (Kaltura) for a course with `client.lessons`.
 
 </div>
 

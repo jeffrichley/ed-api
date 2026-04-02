@@ -510,6 +510,67 @@ ed-api content to-markdown '...' --json
 
 ---
 
+## lessons — Lesson and slide browsing
+
+### `lessons list COURSE_ID`
+
+List all lessons in a course.
+
+```bash
+ed-api lessons list 12345
+ed-api lessons list 12345 --json
+```
+
+**Output (--json):**
+```json
+[
+  {"id": 67890, "title": "Week 1: Introduction", "module_id": 101, "course_id": 12345}
+]
+```
+
+---
+
+### `lessons get LESSON_ID`
+
+Get a lesson with all its slides.
+
+```bash
+ed-api lessons get 67890
+ed-api lessons get 67890 --json
+```
+
+**Output (--json):**
+```json
+{
+  "id": 67890,
+  "title": "Week 1: Introduction",
+  "slides": [
+    {"id": 11223, "title": "Overview", "type": "document", "video_url": null},
+    {"id": 11224, "title": "Lecture Video", "type": "video", "video_url": "https://..."}
+  ]
+}
+```
+
+---
+
+### `lessons videos COURSE_ID`
+
+List all video slides in a course, with their Kaltura URLs.
+
+```bash
+ed-api lessons videos 12345
+ed-api lessons videos 12345 --json
+```
+
+**Output (--json):**
+```json
+[
+  {"id": 11224, "title": "Lecture Video", "type": "video", "video_url": "https://..."}
+]
+```
+
+---
+
 ## Scripting with --json
 
 All `--json` flags print valid JSON to stdout and suppress all other output, making it easy to pipe into `jq`:
