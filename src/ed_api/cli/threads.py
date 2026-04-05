@@ -64,16 +64,19 @@ def get(
         thread = client.threads.get_by_number(int(course_id), int(number))
     else:
         thread = client.threads.get(int(thread_ref))
+    def _serialize_comment(c):
+        d = {"id": c.id, "type": c.type, "content": c.content,
+             "is_endorsed": c.is_endorsed, "user_id": c.user_id}
+        if c.replies:
+            d["replies"] = [_serialize_comment(r) for r in c.replies]
+        return d
+
     if json_output:
         typer.echo(json.dumps({
             "id": thread.id, "number": thread.number, "title": thread.title,
             "content": thread.content, "category": thread.category,
             "is_answered": thread.is_answered,
-            "comments": [
-                {"id": c.id, "type": c.type, "content": c.content,
-                 "is_endorsed": c.is_endorsed, "user_id": c.user_id}
-                for c in thread.comments
-            ],
+            "comments": [_serialize_comment(c) for c in thread.comments],
         }))
     else:
         from rich.markdown import Markdown
@@ -97,23 +100,34 @@ def get(
         console.print(Markdown(body_md))
 
         # Comments
-        if not thread.comments:
-            console.print("\n[dim]No comments yet.[/dim]")
-        for c in thread.comments:
+        def _print_comment(c, indent=0):
             author = thread.users.get(c.user_id)
             name = author.name if author else f"User {c.user_id}"
             role = f" ({author.role})" if author else ""
             endorsed = " [green]endorsed[/green]" if c.is_endorsed else ""
             type_label = "[bold cyan]Answer[/bold cyan]" if c.type == "answer" else "[bold]Comment[/bold]"
+            prefix = "  " * indent
 
             try:
                 comment_md = ed_xml_to_markdown(c.content)
             except Exception:
                 comment_md = c.content
 
-            console.print(f"\n{'─' * 60}")
-            console.print(f"{type_label} by {name}{role}{endorsed}")
+            separator = "─" * (60 - indent * 2)
+            console.print(f"\n{prefix}{separator}")
+            if indent:
+                console.print(f"{prefix}↳ {type_label} by {name}{role}{endorsed}")
+            else:
+                console.print(f"{prefix}{type_label} by {name}{role}{endorsed}")
             console.print(Markdown(comment_md))
+
+            for reply in c.replies:
+                _print_comment(reply, indent=indent + 1)
+
+        if not thread.comments:
+            console.print("\n[dim]No comments yet.[/dim]")
+        for c in thread.comments:
+            _print_comment(c)
 
 
 @app.command()
